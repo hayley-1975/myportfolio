@@ -11,8 +11,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Kenneth Villar — brewedops",
-  description: "Build it once. Run it forever. Funnels, workflows and apps built to solve real problems.",
-  keywords: ["brewedops", "Kenneth Villar", "GoHighLevel", "AI Agents", "Automations", "Full-Stack Ops"],
+  description:
+    "Build it once. Run it forever. Funnels, workflows and apps built to solve real problems.",
+  keywords: [
+    "brewedops",
+    "Kenneth Villar",
+    "GoHighLevel",
+    "AI Agents",
+    "Automations",
+    "Full-Stack Ops",
+  ],
   authors: [{ name: "Kenneth Villar" }],
   openGraph: {
     title: "Kenneth Villar — brewedops",
@@ -37,8 +45,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="bg-surface text-cerulean-900 selection:bg-cerulean-200 selection:text-cerulean-900">
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body
+        className={`${inter.className} font-sans bg-surface text-cerulean-900 selection:bg-cerulean-200 selection:text-cerulean-900`}
+      >
         <div className="flex flex-col lg:flex-row min-h-screen">
           {/* Left Sidebar */}
           <Sidebar />

@@ -42,7 +42,7 @@ export function ToolsBar({ tools }: ToolsBarProps) {
       case "intercom":
         return (
           <span className="text-xs font-black text-blue-500 tracking-tighter">
-            //
+            {"//"}
           </span>
         );
       case "slack":
