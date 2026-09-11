@@ -24,7 +24,7 @@ const config: Config = {
           950: "#042430",
         },
         surface: {
-          DEFAULT: "#F4F8FA",
+          DEFAULT: "#F2F7FA",
           card: "#FFFFFF",
           border: "#D8E7EE",
           muted: "#5C6B73",
@@ -35,10 +35,11 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-poppins)", "sans-serif"],
+        poppins: ["var(--font-poppins)", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 4px 20px -2px rgba(7, 59, 76, 0.05), 0 2px 6px -1px rgba(7, 59, 76, 0.03)",
+        soft: "0 4px 20px -2px rgba(7, 59, 76, 0.04), 0 2px 6px -1px rgba(7, 59, 76, 0.02)",
         card: "0 10px 30px -5px rgba(7, 59, 76, 0.04), 0 4px 10px -2px rgba(7, 59, 76, 0.02)",
       },
     },

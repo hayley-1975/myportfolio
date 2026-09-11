@@ -1,21 +1,20 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Folder,
+  FolderSimple,
   User,
-  Lightbulb,
-  Shield,
-  Layers,
-  Quote,
-  CheckCircle2,
-  Workflow,
-  Globe,
-  Database,
-  Smartphone,
-  Code,
-  Sparkles,
+  Sparkle,
+  ShieldCheck,
+  Stack,
+  Quotes,
+  SealCheck,
   ArrowUpRight,
-} from "lucide-react";
+  Code,
+  GitFork,
+  Database,
+  Globe,
+  DeviceMobile,
+} from "@phosphor-icons/react/dist/ssr";
 import {
   ProjectItem,
   ServiceItem,
@@ -41,28 +40,31 @@ export function BentoGrid({
       case "code":
         return <Code className="w-3 h-3 text-cerulean-600" />;
       case "workflow":
-        return <Workflow className="w-3 h-3 text-cerulean-600" />;
+        return <GitFork className="w-3 h-3 text-cerulean-600" />;
       case "database":
         return <Database className="w-3 h-3 text-cerulean-600" />;
       case "globe":
         return <Globe className="w-3 h-3 text-cerulean-600" />;
       case "smartphone":
-        return <Smartphone className="w-3 h-3 text-cerulean-600" />;
+        return <DeviceMobile className="w-3 h-3 text-cerulean-600" />;
       default:
-        return <Sparkles className="w-3 h-3 text-cerulean-600" />;
+        return <Sparkle className="w-3 h-3 text-cerulean-600" />;
     }
   };
 
   return (
-    <div className="w-full bg-cerulean-100/40 p-2.5 sm:p-3.5 rounded-3xl border border-cerulean-200/60 shadow-sm flex flex-col justify-between gap-3">
+    <div className="w-full bg-cerulean-100/40 backdrop-blur-xs p-2.5 sm:p-3.5 rounded-3xl border border-cerulean-200/60 shadow-sm flex flex-col justify-between gap-3">
       {/* ================= TOP ROW ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* 1. PROJECTS CARD (Spans 5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+        <div
+          id="projects"
+          className="scroll-mt-6 lg:col-span-5 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
+        >
           <div className="mb-2">
             <div className="flex items-center gap-2 mb-1">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <Folder className="w-3.5 h-3.5" />
+                <FolderSimple weight="fill" className="w-3.5 h-3.5" />
               </span>
               <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                 PROJECTS
@@ -73,9 +75,7 @@ export function BentoGrid({
             </p>
           </div>
 
-          {/* Clean Light Browser Frame Mockup */}
           <div className="rounded-xl overflow-hidden border border-cerulean-200/80 bg-white shadow-sm flex-1 flex flex-col justify-between">
-            {/* Browser top dots */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-cerulean-50/60 border-b border-cerulean-100">
               <div className="w-2 h-2 rounded-full bg-rose-400"></div>
               <div className="w-2 h-2 rounded-full bg-amber-400"></div>
@@ -85,15 +85,14 @@ export function BentoGrid({
               </span>
             </div>
 
-            {/* Inner Project Content */}
             <div className="p-2.5 sm:p-3 grid grid-cols-12 gap-2.5 items-center">
               <div className="col-span-7 space-y-1">
                 <h3 className="text-xs font-bold text-cerulean-950 leading-snug">
                   {project.title}
                 </h3>
                 <p className="text-[10px] text-surface-muted leading-relaxed line-clamp-2">
-                  High-converting funnels, automated workflows, and CRM logic
-                  built to solve operational bottlenecks.
+                  Enterprise-grade automated workflows, CRM pipelines, and
+                  security protocols.
                 </p>
                 <a
                   href={project.link}
@@ -117,12 +116,15 @@ export function BentoGrid({
           </div>
         </div>
 
-        {/* 2. ABOUT CARD (Spans 3.5 cols -> 3 cols) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center">
+        {/* 2. ABOUT CARD (Spans 3 cols) */}
+        <div
+          id="about"
+          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center"
+        >
           <div>
             <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <User className="w-3.5 h-3.5" />
+                <User weight="fill" className="w-3.5 h-3.5" />
               </span>
               <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                 ABOUT
@@ -133,35 +135,37 @@ export function BentoGrid({
             </p>
           </div>
 
-          {/* Desk illustration / Avatar badge */}
           <div className="my-2 flex justify-center items-center">
             <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-tr from-cerulean-100 via-white to-cerulean-50 border border-cerulean-200 p-2 shadow-inner flex flex-col items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-cerulean-600 text-white flex items-center justify-center font-bold shadow text-sm mb-1">
-                KV
+              <div className="w-10 h-10 rounded-full bg-cerulean-600 text-white flex items-center justify-center font-bold shadow text-xs mb-1">
+                MR
               </div>
               <p className="text-[10px] font-bold text-cerulean-950">
-                Kenneth Villar
+                Maria Rochelle
               </p>
               <p className="text-[9px] text-cerulean-700 font-medium">
-                Ops & AI Architect
+                Ops & Security
               </p>
               <span className="mt-1 px-2 py-0.5 bg-cerulean-900 text-white rounded-full text-[8px] font-bold shadow-xs">
-                Full-Stack GHL
+                Certified Admin
               </span>
             </div>
           </div>
 
           <p className="text-[10px] text-surface-muted leading-tight">
-            Systems that run reliably without breaking.
+            Systems that run reliably and securely without breaking.
           </p>
         </div>
 
         {/* 3. AI BUILDS CARD (Spans 4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+        <div
+          id="ai-builds"
+          className="scroll-mt-6 lg:col-span-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
+        >
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <Lightbulb className="w-3.5 h-3.5" />
+                <Sparkle weight="fill" className="w-3.5 h-3.5" />
               </span>
               <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                 AI BUILDS
@@ -172,7 +176,6 @@ export function BentoGrid({
             </p>
           </div>
 
-          {/* Pill tags matching inspiration */}
           <div className="flex flex-wrap gap-1.5 my-2">
             {[
               "KapeAI",
@@ -201,12 +204,15 @@ export function BentoGrid({
 
       {/* ================= BOTTOM ROW ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* 4. CREDENTIALS CARD (Spans 2.5 -> 3 cols) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center">
+        {/* 4. CREDENTIALS CARD (Spans 3 cols) */}
+        <div
+          id="credentials"
+          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center"
+        >
           <div>
             <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <Shield className="w-3.5 h-3.5" />
+                <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
               </span>
               <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                 CREDENTIALS
@@ -217,11 +223,10 @@ export function BentoGrid({
             </p>
           </div>
 
-          {/* Verified Rosette Graphic */}
           <div className="my-1.5 flex flex-col items-center">
             <div className="w-16 h-16 rounded-full border-2 border-dashed border-cerulean-300 p-1.5 flex items-center justify-center bg-cerulean-50/50 shadow-inner">
               <div className="w-12 h-12 rounded-full bg-cerulean-700 text-white flex flex-col items-center justify-center shadow">
-                <CheckCircle2 className="w-4 h-4 text-white" />
+                <SealCheck weight="fill" className="w-5 h-5 text-white" />
                 <span className="text-[7px] uppercase tracking-wider font-extrabold">
                   VERIFIED
                 </span>
@@ -233,16 +238,19 @@ export function BentoGrid({
           </div>
 
           <p className="text-[9px] text-surface-muted">
-            HighLevel Admin Certified & Ops Architect.
+            HighLevel Admin Certified & Security Architect.
           </p>
         </div>
 
         {/* 5. SERVICES CARD (Spans 3 cols) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+        <div
+          id="services"
+          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
+        >
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <Layers className="w-3.5 h-3.5" />
+                <Stack weight="fill" className="w-3.5 h-3.5" />
               </span>
               <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                 SERVICES
@@ -253,7 +261,6 @@ export function BentoGrid({
             </p>
           </div>
 
-          {/* Compact 01-05 List */}
           <div className="divide-y divide-cerulean-100/80 my-1">
             {services.map((service) => (
               <div
@@ -285,13 +292,15 @@ export function BentoGrid({
         </div>
 
         {/* 6. TESTIMONIALS CARD (Spans 6 cols) */}
-        <div className="lg:col-span-6 bg-white rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
-          {/* Top Label */}
+        <div
+          id="testimonials"
+          className="scroll-mt-6 lg:col-span-6 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
+        >
           <div className="flex items-center justify-between mb-2">
             <div>
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                  <Quote className="w-3.5 h-3.5" />
+                  <Quotes weight="fill" className="w-3.5 h-3.5" />
                 </span>
                 <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
                   TESTIMONIALS
@@ -303,7 +312,6 @@ export function BentoGrid({
             </div>
           </div>
 
-          {/* 3 Horizontal Stacked Testimonial Rows */}
           <div className="space-y-1.5">
             {testimonials.map((t, idx) => (
               <div
