@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   FolderSimple,
@@ -29,12 +31,54 @@ interface BentoGridProps {
   credential: CredentialItem;
 }
 
+// Extra dummy frames the preview cycles through alongside the real `project`
+// prop. The real project always plays first; edit/replace these freely.
+const dummyProjectFrames = [
+  {
+    title: "Autonomous Knowledge Retrieval (RAG)",
+    description:
+      "Postgres pgvector search pipeline connecting company docs with Claude and GPT-4 for internal agent triage.",
+    image_url:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    title: "Security & Role Compliance Gateway",
+    description:
+      "Automated permission auditing and role-based access control policies for distributed technical teams.",
+    image_url:
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    title: "Headless Commerce Checkout Funnel",
+    description:
+      "Custom Shopify + Next.js storefront with abandoned-cart recovery flows across three payment processors.",
+    image_url:
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    title: "Zero-Downtime CI/CD Pipeline",
+    description:
+      "GitHub Actions to blue-green deploys on ECS, with automated rollback triggers on failed health checks.",
+    image_url:
+      "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
 export function BentoGrid({
   project,
   services,
   testimonials,
   credential,
 }: BentoGridProps) {
+  const [activeAboutTab, setActiveAboutTab] = useState<
+    "profile" | "education" | "extras"
+  >("profile");
+
+  const aboutTabs = [
+    { id: "profile" as const, label: "Profile" },
+    { id: "education" as const, label: "Education" },
+    { id: "extras" as const, label: "Extras" },
+  ];
   const getServiceIcon = (iconName: string) => {
     switch (iconName.toLowerCase()) {
       case "code":
@@ -52,31 +96,49 @@ export function BentoGrid({
     }
   };
 
+  // Real project plays first, dummy frames follow in the scroll loop.
+  const previewFrames = [
+    {
+      title: project.title,
+      description:
+        "High-converting funnels, automated workflows, and CRM logic built to solve operational bottlenecks.",
+      image_url: project.image_url,
+    },
+    ...dummyProjectFrames,
+  ];
+
+  // The track renders the list twice back-to-back and scrolls up by exactly
+  // one set's worth (-50% of the doubled track) so the loop is seamless.
+  const SECONDS_PER_FRAME = 3.2;
+  const TOTAL_SECONDS = previewFrames.length * SECONDS_PER_FRAME;
+  const FRAME_HEIGHT_CLASS = "h-[108px] sm:h-[120px]";
+
   return (
-    <div className="w-full bg-cerulean-100/40 backdrop-blur-xs p-2.5 sm:p-3.5 rounded-3xl border border-cerulean-200/60 shadow-sm flex flex-col justify-between gap-3">
-      {/* ================= TOP ROW ================= */}
+    <div className="w-full bg-cerulean-100/40 p-2.5 sm:p-3.5 rounded-3xl border border-cerulean-200/60 shadow-sm flex flex-col justify-between gap-3">
+      {/* Top Row: Projects (5 cols), About (3 cols), AI Tools (4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* 1. PROJECTS CARD (Spans 5 cols) */}
-        <div
-          id="projects"
-          className="scroll-mt-6 lg:col-span-5 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
-        >
-          <div className="mb-2">
-            <div className="flex items-center gap-2 mb-1">
+        {/* 1. PROJECTS CARD */}
+        <div className="projects-bento-card lg:col-span-5 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+          <div className="flex items-center justify-between mb-2">
+            <Link href="/projects" className="flex items-center gap-2 group">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
                 <FolderSimple weight="fill" className="w-3.5 h-3.5" />
               </span>
-              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
+              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900 group-hover:text-cerulean-600 transition-colors">
                 PROJECTS
               </h2>
-            </div>
-            <p className="text-[11px] text-surface-muted leading-tight">
-              {project.description}
-            </p>
+            </Link>
+            <Link
+              href="/projects"
+              className="text-[10px] font-bold text-cerulean-600 hover:underline flex items-center gap-0.5"
+            >
+              <span>View all</span>
+              <ArrowUpRight className="w-2.5 h-2.5" />
+            </Link>
           </div>
 
-          <div className="rounded-xl overflow-hidden border border-cerulean-200/80 bg-white shadow-sm flex-1 flex flex-col justify-between">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-cerulean-50/60 border-b border-cerulean-100">
+          <div className="relative rounded-xl overflow-hidden border border-cerulean-200/80 bg-white shadow-sm flex-1 min-h-[132px] flex flex-col">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-cerulean-50/60 border-b border-cerulean-100 relative z-10 shrink-0">
               <div className="w-2 h-2 rounded-full bg-rose-400"></div>
               <div className="w-2 h-2 rounded-full bg-amber-400"></div>
               <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
@@ -85,95 +147,146 @@ export function BentoGrid({
               </span>
             </div>
 
-            <div className="p-2.5 sm:p-3 grid grid-cols-12 gap-2.5 items-center">
-              <div className="col-span-7 space-y-1">
-                <h3 className="text-xs font-bold text-cerulean-950 leading-snug">
-                  {project.title}
-                </h3>
-                <p className="text-[10px] text-surface-muted leading-relaxed line-clamp-2">
-                  Enterprise-grade automated workflows, CRM pipelines, and
-                  security protocols.
-                </p>
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-[10px] font-semibold text-cerulean-600 hover:text-cerulean-800 pt-0.5"
-                >
-                  <span>View build</span>
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </a>
-              </div>
+            <div className={`relative overflow-hidden ${FRAME_HEIGHT_CLASS}`}>
+              <div className="proj-track flex flex-col">
+                {[...previewFrames, ...previewFrames].map((frame, i) => (
+                  <div
+                    key={i}
+                    className={`shrink-0 w-full p-2.5 sm:p-3 grid grid-cols-12 gap-2.5 items-center ${FRAME_HEIGHT_CLASS}`}
+                  >
+                    <div className="col-span-7 space-y-1">
+                      <h3 className="text-xs font-bold text-cerulean-950 leading-snug line-clamp-2">
+                        {frame.title}
+                      </h3>
+                      <p className="text-[10px] text-surface-muted leading-relaxed line-clamp-2">
+                        {frame.description}
+                      </p>
+                      <Link
+                        href="/projects"
+                        className="inline-flex items-center gap-1 text-[10px] font-semibold text-cerulean-600 hover:text-cerulean-800 pt-0.5"
+                      >
+                        <span>Explore system</span>
+                        <ArrowUpRight className="w-2.5 h-2.5" />
+                      </Link>
+                    </div>
 
-              <div className="col-span-5 rounded-lg overflow-hidden border border-cerulean-100 shadow-inner">
-                <img
-                  src={project.image_url}
-                  alt={project.title}
-                  className="w-full h-20 sm:h-24 object-cover hover:scale-105 transition-transform duration-300"
-                />
+                    <div className="col-span-5 rounded-lg overflow-hidden border border-cerulean-100 shadow-inner">
+                      <img
+                        src={frame.image_url}
+                        alt={frame.title}
+                        className="w-full h-20 sm:h-24 object-cover"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 2. ABOUT CARD (Spans 3 cols) */}
-        <div
-          id="about"
-          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center"
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
+        {/* 2. ABOUT CARD */}
+        <div className="lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center">
+          <div className="flex items-center justify-between">
+            <Link href="/about" className="flex items-center gap-2 group">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
                 <User weight="fill" className="w-3.5 h-3.5" />
               </span>
-              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
+              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900 group-hover:text-cerulean-600">
                 ABOUT
               </h2>
-            </div>
-            <p className="text-[11px] text-surface-muted text-left">
-              Who I am and how I work.
-            </p>
+            </Link>
+            <Link
+              href="/about"
+              className="text-[10px] font-bold text-cerulean-600 hover:underline flex items-center gap-0.5"
+            >
+              <span>Read</span>
+              <ArrowUpRight className="w-2.5 h-2.5" />
+            </Link>
           </div>
 
-          <div className="my-2 flex justify-center items-center">
-            <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-tr from-cerulean-100 via-white to-cerulean-50 border border-cerulean-200 p-2 shadow-inner flex flex-col items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-cerulean-600 text-white flex items-center justify-center font-bold shadow text-xs mb-1">
-                MR
-              </div>
+          <div className="my-1 flex justify-center items-center">
+            <div className="relative w-full h-8 rounded-2xl  p-1.5 flex flex-col items-center justify-center">
               <p className="text-[10px] font-bold text-cerulean-950">
-                Maria Rochelle
+                Maria Rochelle Quelonio
               </p>
               <p className="text-[9px] text-cerulean-700 font-medium">
                 Ops & Security
               </p>
-              <span className="mt-1 px-2 py-0.5 bg-cerulean-900 text-white rounded-full text-[8px] font-bold shadow-xs">
-                Certified Admin
-              </span>
             </div>
           </div>
 
-          <p className="text-[10px] text-surface-muted leading-tight">
-            Systems that run reliably and securely without breaking.
-          </p>
+          <div className="flex items-center justify-center gap-1 mb-1">
+            {aboutTabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveAboutTab(tab.id)}
+                className={`px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wide transition-colors ${
+                  activeAboutTab === tab.id
+                    ? "bg-cerulean-900 text-white"
+                    : "bg-cerulean-50 text-cerulean-700 border border-cerulean-200/70 hover:bg-cerulean-100"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div
+            key={activeAboutTab}
+            className="about-tab-content min-h-[36px] flex flex-col items-center justify-center gap-0.5"
+          >
+            {activeAboutTab === "profile" && (
+              <>
+                <p className="text-[11px] font-bold text-cerulean-950">
+                  24 years old
+                </p>
+                <p className="text-[10px] text-surface-muted">
+                  Pasig City, Philippines
+                </p>
+              </>
+            )}
+
+            {activeAboutTab === "education" && (
+              <>
+                <p className="text-[11px] font-bold text-cerulean-950">
+                  BS Information Technology
+                </p>
+                <p className="text-[10px] text-surface-muted">
+                  Polytechnic University of the Philippines — Lopez
+                </p>
+              </>
+            )}
+
+            {activeAboutTab === "extras" && (
+              <div className="flex flex-wrap justify-center gap-1">
+                {/* Placeholder cert — swap for your actual one(s) */}
+                <span className="px-2 py-0.5 rounded-full bg-cerulean-50 text-cerulean-800 border border-cerulean-200/70 text-[9px] font-semibold">
+                  Automation & Workflow Specialist
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* 3. AI BUILDS CARD (Spans 4 cols) */}
-        <div
-          id="ai-builds"
-          className="scroll-mt-6 lg:col-span-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-1">
+        {/* 3. AI TOOLS CARD */}
+        <div className="lg:col-span-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+          <div className="flex items-center justify-between mb-1">
+            <Link href="/ai-tools" className="flex items-center gap-2 group">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
                 <Sparkle weight="fill" className="w-3.5 h-3.5" />
               </span>
-              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
-                AI BUILDS
+              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900 group-hover:text-cerulean-600">
+                AI TOOLS
               </h2>
-            </div>
-            <p className="text-[11px] text-surface-muted leading-tight">
-              Agents, RAG chatbots and the tools I run on them.
-            </p>
+            </Link>
+            <Link
+              href="/ai-tools"
+              className="text-[10px] font-bold text-cerulean-600 hover:underline flex items-center gap-0.5"
+            >
+              <span>View all</span>
+              <ArrowUpRight className="w-2.5 h-2.5" />
+            </Link>
           </div>
 
           <div className="flex flex-wrap gap-1.5 my-2">
@@ -202,25 +315,17 @@ export function BentoGrid({
         </div>
       </div>
 
-      {/* ================= BOTTOM ROW ================= */}
+      {/* Bottom Row: Credentials (3 cols), Services (3 cols), Testimonials (6 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* 4. CREDENTIALS CARD (Spans 3 cols) */}
-        <div
-          id="credentials"
-          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center"
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
-              <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
-              </span>
-              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
-                CREDENTIALS
-              </h2>
-            </div>
-            <p className="text-[10px] text-surface-muted leading-tight text-left">
-              {credential.title}
-            </p>
+        {/* 4. CREDENTIALS CARD */}
+        <div className="lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all text-center">
+          <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
+            <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
+              <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
+            </span>
+            <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
+              CREDENTIALS
+            </h2>
           </div>
 
           <div className="my-1.5 flex flex-col items-center">
@@ -242,30 +347,32 @@ export function BentoGrid({
           </p>
         </div>
 
-        {/* 5. SERVICES CARD (Spans 3 cols) */}
-        <div
-          id="services"
-          className="scroll-mt-6 lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-1">
+        {/* 5. SERVICES CARD */}
+        <div className="lg:col-span-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
+          <div className="flex items-center justify-between mb-1">
+            <Link href="/services" className="flex items-center gap-2 group">
               <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
                 <Stack weight="fill" className="w-3.5 h-3.5" />
               </span>
-              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
+              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900 group-hover:text-cerulean-600">
                 SERVICES
               </h2>
-            </div>
-            <p className="text-[10px] text-surface-muted">
-              What I build for coaches and agencies.
-            </p>
+            </Link>
+            <Link
+              href="/services"
+              className="text-[10px] font-bold text-cerulean-600 hover:underline flex items-center gap-0.5"
+            >
+              <span>View all</span>
+              <ArrowUpRight className="w-2.5 h-2.5" />
+            </Link>
           </div>
 
           <div className="divide-y divide-cerulean-100/80 my-1">
             {services.map((service) => (
-              <div
+              <Link
                 key={service.order_number}
-                className="py-1 flex items-center justify-between group hover:bg-cerulean-50/40 px-1 rounded transition-colors"
+                href="/services"
+                className="py-1 flex items-center justify-between group hover:bg-cerulean-50/60 px-1 rounded transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <div className="p-0.5 rounded bg-cerulean-50">
@@ -278,7 +385,7 @@ export function BentoGrid({
                 <span className="text-[10px] font-mono font-bold text-cerulean-400">
                   {service.order_number}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -291,31 +398,34 @@ export function BentoGrid({
           </Link>
         </div>
 
-        {/* 6. TESTIMONIALS CARD (Spans 6 cols) */}
-        <div
-          id="testimonials"
-          className="scroll-mt-6 lg:col-span-6 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100/90 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all"
-        >
+        {/* 6. TESTIMONIALS CARD */}
+        <div className="lg:col-span-6 bg-white/95 backdrop-blur-sm rounded-2xl border border-cerulean-100 shadow-card p-3.5 sm:p-4 flex flex-col justify-between hover:border-cerulean-300 transition-all">
           <div className="flex items-center justify-between mb-2">
-            <div>
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
-                  <Quotes weight="fill" className="w-3.5 h-3.5" />
-                </span>
-                <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900">
-                  TESTIMONIALS
-                </h2>
-              </div>
-              <p className="text-[10px] text-surface-muted">
-                What the people I build for say about the work.
-              </p>
-            </div>
+            <Link
+              href="/testimonials"
+              className="flex items-center gap-2 group"
+            >
+              <span className="p-1 rounded-md bg-badge-orangeBg text-badge-orange border border-badge-orange/20">
+                <Quotes weight="fill" className="w-3.5 h-3.5" />
+              </span>
+              <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-cerulean-900 group-hover:text-cerulean-600">
+                TESTIMONIALS
+              </h2>
+            </Link>
+            <Link
+              href="/testimonials"
+              className="text-[10px] font-bold text-cerulean-600 hover:underline flex items-center gap-0.5"
+            >
+              <span>View all</span>
+              <ArrowUpRight className="w-2.5 h-2.5" />
+            </Link>
           </div>
 
           <div className="space-y-1.5">
             {testimonials.map((t, idx) => (
-              <div
+              <Link
                 key={t.id || idx}
+                href="/testimonials"
                 className="px-3 py-1.5 rounded-xl bg-cerulean-50/50 border border-cerulean-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-cerulean-100/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
@@ -330,11 +440,46 @@ export function BentoGrid({
                 <div className="text-[9px] font-mono text-surface-muted sm:text-right shrink-0">
                   {t.tags}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes aboutTabFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(3px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .about-tab-content {
+          animation: aboutTabFadeIn 0.2s ease;
+        }
+
+        @keyframes projAutoScroll {
+          from {
+            transform: translateY(0);
+          }
+          to {
+            transform: translateY(-50%);
+          }
+        }
+
+        .proj-track {
+          animation: projAutoScroll ${TOTAL_SECONDS}s linear infinite;
+          animation-play-state: paused;
+        }
+
+        .projects-bento-card:hover .proj-track {
+          animation-play-state: running;
+        }
+      `}</style>
     </div>
   );
 }
