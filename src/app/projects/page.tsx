@@ -419,7 +419,7 @@ export default function ProjectsPage() {
 
                 <div className="mt-4 p-3 bg-black/40 rounded-lg font-mono text-[11px] text-cerulean-200 leading-relaxed overflow-x-auto">
                   <p className="text-cerulean-500">
-                    // Real-time Router Log [Production Node 04]
+                    {"// Real-time Router Log [Production Node 04]"}
                   </p>
                   <p>
                     <span className="text-cerulean-300">POST</span>{" "}
@@ -429,7 +429,7 @@ export default function ProjectsPage() {
                   </p>
                   <p>
                     <span className="text-amber-300">ROUTER</span> →
-                    GHL_Pipeline: "Commercial VIP" → Assigned
+                    GHL_Pipeline: &quot;Commercial VIP&quot; → Assigned
                   </p>
                 </div>
               </div>
