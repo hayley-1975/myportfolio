@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, ShieldCheck, SealCheck, CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, ArrowUpRight, SealCheck, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 
 export default function AboutPage() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Sparkle, ArrowUpRight, Cpu, Lightning, Robot } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, ArrowUpRight,  } from "@phosphor-icons/react/dist/ssr";
 
 export default function AIToolsPage() {
   const tools = [
